@@ -20,6 +20,14 @@ output "odoo_sg_id" {
   value = aws_security_group.odoo_sg.id
 }
 
+output "magento_sg_id" {
+  value = aws_security_group.magento_sg.id
+}
+
 output "elb_sg_id" {
   value = aws_security_group.elb_sg.id
+}
+
+output "magento_db_sg_id" {
+  value = aws_security_group.magento_db_sg.id
 }

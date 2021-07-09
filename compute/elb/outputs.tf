@@ -5,3 +5,7 @@ output elb_id {
 output odoo_tg_arn {
   value = aws_alb_target_group.odoo_tg.arn
 }
+
+output magento_tg_arn {
+  value = aws_alb_target_group.magento_tg.arn
+}
