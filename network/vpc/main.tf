@@ -115,6 +115,14 @@ resource "aws_security_group" "elb_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  ingress {
+    from_port   = "80"
+    to_port     = "80"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port = "0"
     to_port   = "0"
@@ -150,5 +158,51 @@ resource "aws_security_group" "odoo_sg" {
   tags = {
     Environment = "${var.environment}"
     Name = "${var.environment}-odoo-sg"
+  }
+}
+
+
+resource "aws_security_group" "magento_sg" {
+  name        = "${var.environment}-magento-sg"
+  description = "Magento security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+  depends_on  = [aws_vpc.vpc]
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Environment = "${var.environment}"
+    Name = "${var.environment}-magento-sg"
+  }
+}
+
+resource "aws_security_group" "magento_db_sg" {
+  name        = "${var.environment}-magento-db-sg"
+  description = "Magento DB security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+  depends_on  = [aws_vpc.vpc]
+
+  ingress {
+    from_port   = "3306"
+    to_port     = "3306"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Environment = "${var.environment}"
+    Name = "${var.environment}-magento-db-sg"
   }
 }
