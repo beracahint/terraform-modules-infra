@@ -206,3 +206,58 @@ resource "aws_security_group" "magento_db_sg" {
     Name = "${var.environment}-magento-db-sg"
   }
 }
+
+
+resource "aws_security_group" "sp_db_sg" {
+  name        = "${var.environment}-sp-db-sg"
+  description = "Odoo DB security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+  depends_on  = [aws_vpc.vpc]
+
+  ingress {
+    from_port   = "3306"
+    to_port     = "3306"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Environment = "${var.environment}"
+    Name = "${var.environment}-sp-db-sg"
+  }
+}
+
+
+resource "aws_security_group" "odoo_db_sg" {
+  name        = "${var.environment}-odoo-db-sg"
+  description = "Odoo DB security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+  depends_on  = [aws_vpc.vpc]
+
+  ingress {
+    from_port   = "5432"
+    to_port     = "5432"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Environment = "${var.environment}"
+    Name = "${var.environment}-odoo-db-sg"
+  }
+}
+
