@@ -31,3 +31,11 @@ output "elb_sg_id" {
 output "magento_db_sg_id" {
   value = aws_security_group.magento_db_sg.id
 }
+
+output "sp_db_sg_id" {
+  value = aws_security_group.sp_db_sg.id
+}
+
+output "odoo_db_sg_id" {
+  value = aws_security_group.odoo_db_sg.id
+}
