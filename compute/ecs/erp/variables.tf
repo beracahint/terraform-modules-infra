@@ -19,3 +19,6 @@ variable subnet_ids {
 variable db_host {}
 variable db_user {}
 variable db_password {}
+variable file_system_id {}
+variable file_system_access_point_id {}
+variable container_filesystem_path {}

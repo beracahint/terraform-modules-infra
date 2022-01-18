@@ -46,8 +46,25 @@ resource "aws_ecs_task_definition" "odoo_task" {
           value = "${var.db_password}"
         }
       ]
+      mountPoints             = [
+        {
+          containerPath = var.container_filesystem_path
+          sourceVolume = "efs-odoo-volume"
+        }
+      ]
     }
   ])
+  volume {
+    name = "efs-odoo-volume"
+    efs_volume_configuration {
+      file_system_id = var.file_system_id
+      transit_encryption = "ENABLED"
+      authorization_config {
+        access_point_id = var.file_system_access_point_id
+        iam = "ENABLED"
+      }
+    }
+  }
 }
 
 resource "aws_ecs_service" "odoo" {

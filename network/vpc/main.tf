@@ -261,3 +261,28 @@ resource "aws_security_group" "odoo_db_sg" {
   }
 }
 
+resource "aws_security_group" "odoo_efs_sg" {
+  name        = "${var.environment}-odoo-efs-sg"
+  description = "Odoo EFS security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+  depends_on  = [aws_vpc.vpc]
+
+  ingress {
+    from_port   = "2049"
+    to_port     = "2049"
+    protocol    = "tcp"
+    security_groups = [aws_security_group.odoo_sg.id]
+  }
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Environment = "${var.environment}"
+    Name = "${var.environment}-odoo-efs-sg"
+  }
+}
