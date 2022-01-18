@@ -92,3 +92,55 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
     ]
   })
 }
+
+
+resource "aws_iam_role" "ecs_odoo_task_role" {
+  name = "ecsOdooTaskRole-${var.environment}"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "ecs_odoo_task_role_policy" {
+  name = "ecsOdooTaskRolePolicy-${var.environment}"
+  role = aws_iam_role.ecs_odoo_task_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "elasticfilesystem:ClientMount",
+          "elasticfilesystem:ClientWrite"
+        ]
+        Resource = "${var.odoo_filesystem_arn}"
+        Condition = {
+          StringEquals = {
+            "elasticfilesystem:AccessPointArn" = var.odoo_filesystem_access_point_arn
+          }
+        }
+      }
+    ]
+  })
+}
+

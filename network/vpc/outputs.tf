@@ -39,3 +39,7 @@ output "sp_db_sg_id" {
 output "odoo_db_sg_id" {
   value = aws_security_group.odoo_db_sg.id
 }
+
+output "odoo_efs_sg"{
+  value = aws_security_group.odoo_efs_sg.id
+}
